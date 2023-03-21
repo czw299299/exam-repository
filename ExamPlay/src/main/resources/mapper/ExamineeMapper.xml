@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.czw.examplay.mapper.ExamineeMapper">
+    <select id="selectexaminee" resultType="ExamineeInf">
+            select  * from examinee_inf where ic=#{ic} and eepwd=#{eepwd}
+        </select>
+    <insert id="addexaminee" parameterType="ExamineeInf" useGeneratedKeys="true" keyProperty="eeid">
+           insert into examinee_inf (ic,eeimg,eename,eepwd) values (
+              #{ic},#{eeimg},#{eename},#{eepwd}
+           )
+    </insert>
+    <select id="selecteeid"  parameterType="ExamineeInf" resultType="ExamineeInf">
+         select * from examinee_inf where eeid=#{eeid}
+    </select>
+
+    <select id="selectic" resultType="ExamineeInf">
+         select * from examinee_inf where ic=#{ic}
+    </select>
+    <select id="selectall" parameterType="ExamineeInf" resultType="ExamineeInf">
+        select * from examinee_inf
+        <where>
+            <include refid="queryExamineeContions"></include>
+        </where>
+    </select>
+    <update id="alterexaminee" >
+        update examinee_inf
+         <set>
+        <include refid="queryExamineeContions2"/>
+         </set>
+        where eeid=#{eeid}
+    </update>
+    <sql id="queryExamineeContions">
+        <if test="eestate!=null">
+            eestate=#{eestate}
+        </if>
+    </sql>
+    <sql id="queryExamineeContions2">
+        <if test="eename!=null">
+            eename=#{eename},
+        </if>
+        <if test="eepwd!=null">
+            eepwd=#{eepwd},
+        </if>
+        <if test="eemtime!=null">
+            eemtime=#{eemtime},
+        </if>
+        <if test="eeimg!=null">
+                eeimg=#{eeimg}
+        </if>
+    </sql>
+</mapper>

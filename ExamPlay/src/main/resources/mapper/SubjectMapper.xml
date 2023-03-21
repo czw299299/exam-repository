@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.czw.examplay.mapper.SubjectMapper">
+          <insert id="addsubject" parameterType="SubjectInf" useGeneratedKeys="true" keyProperty="sid">
+             insert into subject_inf
+             (sname,sstate)
+              values
+               (#{sname},#{sstate})
+          </insert>
+         <select id="showall" resultType="SubjectInf">
+             select  * from subject_inf
+         </select>
+         <delete id="delsubject">
+             delete  from subject_inf where sid=#{sid}
+         </delete>
+         <update id="upsubject">
+        update  subject_inf set sname=#{sname},sstate=#{sstate},smtime=#{smtime} where sid=#{sid}
+         </update>
+</mapper>

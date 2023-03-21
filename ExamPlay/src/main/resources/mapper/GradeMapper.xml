@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.czw.examplay.mapper.GradeMapper">
+      <select id="selectGrades" parameterType="GradeVo" resultType="GradeQo">
+SELECT e.eid,e.ename,a.awid,ee.eename,g.grade,e.estime,e.eetime from grade_inf g
+INNER JOIN allow_inf a on g.awid=a.awid
+INNER JOIN exam_inf e  on e.eid=a.eid
+INNER JOIN examinee_inf ee on ee.eeid=a.eeid
+INNER JOIN paper_inf  p on p.pid=e.pid
+where ee.eeid=#{eeid}
+      </select>
+    <insert id="addGrade">
+                        insert into grade_inf
+                         (awid,grade)
+                        values
+                         (#{awid},#{grade});
+    </insert>
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.czw.examplay.mapper.MenuMapper">
+    <select id="menushow" resultType="MenuInf">
+        select m.* from role_inf r
+                            inner JOIN role_menu_inf rm ON r.rid=rm.rid
+                            INNER JOIN menu_inf m ON rm.mid=m.mid
+        WHERE r.rid=#{rid} and m.mpid=#{mpid}
+    </select>
+    <select id="ownpowers" parameterType="MenuVo" resultType="MenuInf">
+        SELECT m.* from role_menu_inf rm
+                            INNER JOIN  role_inf r ON rm.rid=r.rid
+                            INNER JOIN menu_inf m on rm.mid=m.mid
+        where r.rid=#{rid} and m.mpid=#{mpid}
+    </select>
+
+</mapper>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.czw.examplay.mapper.PaperTopicMapper">
+         <insert id="addpt" parameterType="PaperTopicInf" useGeneratedKeys="true" keyProperty="ptid">
+                         insert into paper_topic_inf            (
+                           pid,tid
+                         )
+                         values
+                         <foreach collection="list" index="index" item="item" separator=",">
+                          (    #{item.pid,jdbcType=BIGINT},
+                              #{item.tid,jdbcType=BIGINT}
+                          )
+                         </foreach>
+         </insert>
+    <delete id="delpt" parameterType="PaperTopicInf">
+        delete from paper_topic_inf where
+    pid in
+   <foreach collection="list" item="item" open="(" close=")" separator="," >
+        #{item.pid,jdbcType=BIGINT}
+    </foreach>
+    and tid in
+        <foreach collection="list" item="item" open="(" close=")" separator="," >
+            #{item.tid,jdbcType=BIGINT}
+        </foreach>
+
+
+    </delete>
+    <delete id="delptid">
+        delete from paper_topic_inf
+        <where>
+          <include refid="ptid">
+
+          </include>
+        </where>
+    </delete>
+    <sql id="ptid">
+        <if test="pid!=null">
+            pid=#{pid}
+        </if>
+        <if test="tid!=null">
+            tid=#{tid}
+        </if>
+    </sql>
+</mapper>

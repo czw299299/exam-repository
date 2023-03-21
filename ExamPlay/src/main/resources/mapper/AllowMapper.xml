@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.czw.examplay.mapper.AllowMapper">
+         <select id="selectallonline" parameterType="AllowVo" resultType="AllowQo">
+              select a.awid,e.ename,p.pid,a.eid,ee.eename,e.estime,e.eetime,e.estate,a.awstate from allow_inf a
+              inner join exam_inf e on e.eid=a.eid
+              inner join examinee_inf ee on ee.eeid=a.eeid
+             inner join paper_inf p on p.pid=e.pid
+              <where>
+                  <include refid="queryAllowContions"></include>
+              </where>
+         </select>
+    <sql id="queryAllowContions">
+         <if test="eeid!=null">
+           and  a.eeid=#{eeid}
+         </if>
+         <if test="estate!=null">
+           and   e.estate=#{estate}
+         </if>
+        <if test="awstate==1">
+          and  a.awstate=#{awstate}
+        </if>
+        <if test="awstate==2">
+            and  a.awstate not in(1)
+        </if>
+        <if test="ename!=null">
+            and e.ename like  concat('%', #{ename},'%')
+        </if>
+
+    </sql>
+    <select id="selectawid"  resultType="AllowInf">
+        select * from allow_inf where awid=#{awid}
+    </select>
+    <insert id="addAllow">
+          insert  into allow_inf (awid,eid,eeid) values
+           (#{awid},#{eid},#{eeid})
+    </insert>
+    <delete id="delAllow">
+          delete a from allow_inf a
+              inner join exam_inf e on e.eid=a.eid
+          where
+            a.awid=#{awid}
+            and e.estime &gt;= NOW() + INTERVAL 24 HOUR
+    </delete>
+    <update id="alterAllow">
+        update  allow_inf set awstate=#{awstate},awmtime=#{awmtime}
+        where awid=#{awid}
+    </update>
+    <sql id="queryAllowContions2">
+        <if test="awid!=null">
+           awid=#{awid}
+        </if>
+    </sql>
+</mapper>

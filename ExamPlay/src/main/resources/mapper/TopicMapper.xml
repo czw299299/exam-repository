@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.czw.examplay.mapper.TopicMapper">
+    <insert id="addtopics" parameterType="TopicInf" useGeneratedKeys="true" keyProperty="tid">
+             insert into topic_inf (
+             sid,tcontent,isAsr,optionA,optionB,optionC,optionD,optionE
+             )
+             values
+        <foreach collection="list"  index="index" item="item" separator=",">
+              (
+              #{item.sid,jdbcType=BIGINT},
+              #{item.tcontent,jdbcType=NVARCHAR},
+              #{item.isAsr,jdbcType=NVARCHAR},
+              #{item.optionA,jdbcType=NVARCHAR},
+              #{item.optionB,jdbcType=NVARCHAR},
+              #{item.optionC,jdbcType=NVARCHAR},
+              #{item.optionD,jdbcType=NVARCHAR},
+              #{item.optionE,jdbcType=NVARCHAR}
+             )
+        </foreach>
+          </insert>
+    <sql id="queryTopicContions">
+       <if test="sid!=null">
+             sid=#{sid}
+       </if>
+    </sql>
+    <select id="selectsidtopic" parameterType="SubjectInf" resultType="TopicInf">
+              select  * from  topic_inf
+              <where>
+                  <include refid="queryTopicContions">
+
+                  </include>
+              </where>
+         </select>
+    <delete id="deltopic">
+            delete  from topic_inf where tid=#{tid}
+         </delete>
+    <update id="uptopic">
+           update
+           topic_inf
+            set
+           sid=#{sid},
+           tcontent=#{tcontent},
+           isAsr=#{isAsr},
+           optionA=#{optionA},
+           optionB=#{optionB},
+           optionC=#{optionC},
+           optionD=#{optionD},
+           optionE=#{optionE}
+            where tid=#{tid};
+         </update>
+    <select id="addselectptsid" parameterType="TopicVo" resultType="TopicInf">
+            SELECT *  FROM topic_inf
+ where tid not in
+ (SELECT t.tid  from
+  paper_topic_inf pt
+ INNER JOIN paper_inf p ON pt.pid=p.pid
+ INNER JOIN topic_inf t on pt.tid=t.tid
+WHERE  p.pid=#{pid})
+and sid=#{sid}
+    </select>
+    <select id="ownselectptpid" parameterType="PaperInf" resultType="TopicInf">
+ SELECT t.*  from
+  paper_topic_inf pt
+ INNER JOIN paper_inf p ON pt.pid=p.pid
+ INNER JOIN topic_inf t on pt.tid=t.tid
+WHERE  p.pid=#{pid}
+    </select>
+    <delete id="deltopicsid">
+        delete  from topic_inf where sid=#{sid}
+    </delete>
+</mapper>

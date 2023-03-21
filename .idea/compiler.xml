@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="ExamManger" />
+        <module name="ExamPlay" />
+        <module name="ImageManger" />
+        <module name="code-spring-boot-starter" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="code-spring-boot-starter" target="1.8" />
+      <module name="ExamManger" target="1.8" />
+      <module name="ExamPlay" target="1.8" />
+      <module name="ImageManger" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ExamManger" options="-parameters" />
+      <module name="ExamPlay" options="-parameters" />
+      <module name="ImageManger" options="-parameters" />
+    </option>
+  </component>
+</project>

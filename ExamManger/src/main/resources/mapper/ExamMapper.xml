@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.czw.exammanger.mapper.ExamMapper">
+          <select id="selectexamsdate"  parameterType="ExamVo" resultType="ExamInf">
+        select * from Exam_inf
+        <where>
+            <include refid="queryExamConditions">
+
+            </include>
+        </where>
+
+          </select>
+    <sql id="queryExamConditions" >
+             <if test="sid!=null">
+                 and sid=#{sid}
+             </if>
+            <if test="aid!=null">
+                 and aid=#{aid}
+            </if>
+            <if test="pid!=null">
+                and pid=#{pid}
+            </if>
+             <if test="estime!=null">
+                 and  estime between  #{estime} and #{eetime}
+             </if>
+            <if test="estate!=null">
+            and estate=#{estate}
+            </if>
+        <!--             <if test="estate==null">-->
+        <!--                    and estate in (1,2,3,4)-->
+        <!--             </if>-->
+
+    </sql>
+     <insert id="addexam" parameterType="ExamInf" useGeneratedKeys="true" keyProperty="eid">
+        insert into exam_inf
+          (
+          sid,
+          aid,
+          pid,
+          ename,
+          estime,
+          eetime,
+          estate
+          )
+         values
+          (
+                    #{sid},
+                    #{aid},
+                    #{pid},
+                    #{ename},
+                    #{estime},
+                    #{eetime},
+                    #{estate}
+          )
+     </insert>
+     <delete id="delexam">
+         delete from exam_inf where eid=#{eid}
+     </delete>
+    <update id="alterexam">
+              update
+               exam_inf
+            <set>
+                <include refid="queryExamConditions2"></include>
+            </set>
+            where eid=#{eid}
+
+    </update>
+    <sql id="queryExamConditions2">
+
+        <if test="sid!=null">
+            sid=#{sid},
+        </if>
+        <if test="aid!=null">
+            aid=#{aid},
+        </if>
+        <if test="estate!=null">
+            estate=#{estate},
+        </if>
+        <if test="estime!=null">
+            estime=#{estime},
+        </if>
+        <if test="eetime!=null">
+            eetime=#{eetime},
+        </if>
+        <if test="emtime!=null">
+            emtime=#{emtime},
+        </if>
+    </sql>
+    <select id="selectexamsaid" parameterType="ExamVo" resultType="ExamQo">
+SELECT e.*,p.pname,a.aacc,s.sname FROM exam_inf e
+INNER JOIN subject_inf s on s.sid=e.sid
+INNER JOIN admin_inf a ON a.aid=e.aid
+INNER JOIN paper_inf p on p.pid=e.pid
+where a.aid=#{aid}
+    </select>
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.czw.exammanger.mapper.PaperMapper">
+    <sql id="queryPaperContions">
+        <if test="sid!=null">
+            sid=#{sid}
+        </if>
+    </sql>
+    <select id="selectpager" parameterType="PaperInf" resultType="PaperInf">
+        select * from paper_inf
+        <where>
+            <include refid="queryPaperContions">
+
+            </include>
+        </where>
+    </select>
+
+    <insert id="addpaper" parameterType="PaperInf" useGeneratedKeys="true" keyProperty="pid">
+        insert into paper_inf ( sid,pname ) values(#{sid},#{pname})
+    </insert>
+    <delete id="delpaperpid">
+        delete from paper_inf where pid=#{pid}
+    </delete>
+    <delete id="delpapersid">
+        delete from paper_inf where sid=#{sid}
+    </delete>
+    <update id="uppaper">
+        update paper_inf
+        set pname=#{pname},pmtime=#{pmtime}
+        where pid=#{pid}
+    </update>
+</mapper>

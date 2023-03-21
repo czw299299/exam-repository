@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.czw.exammanger.mapper.ExamineeMapper">
+          <select id="selectall" parameterType="ExamineeInf" resultType="ExamineeInf">
+               select * from examinee_inf 
+               <where>
+                    <include refid="queryExamineeContins"></include>
+               </where>
+          </select>
+          <delete id="delexaminee">
+              delete  from examinee_inf where eeid=#{eeid}
+          </delete>
+          <update id="alterexaminee">
+              update  examinee_inf set eestate=#{eestate}
+              where eeid=#{eeid}
+          </update>
+    <update id="alterexaminees" parameterType="ExamineeInf">
+        <foreach collection="list" item="bean" index="index" open="" close="" separator=";">
+            update  examinee_inf
+            <set>
+                eestate=#{bean.eestate,jdbcType=BIGINT}
+            </set>
+            where    eeid=#{bean.eeid,jdbcType=BIGINT}
+        </foreach>
+    </update>
+             <sql id="queryExamineeContins">
+                 <if test="eestate!=null">
+                   and  eestate=#{eestate}
+                 </if>
+                 <if test="eename!=null">
+                     and eename like concat('%', #{eename}, '%')
+                 </if>
+             </sql>
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.czw.exammanger.mapper.AllowMapper">
+    <select id="showallowonline" parameterType="AllowVo" resultType="AllowQo">
+        select a.awid,e.ename,ee.eename,e.estime,e.eetime,e.estate,a.awstate from allow_inf a
+        inner join exam_inf e on e.eid=a.eid
+        inner join examinee_inf ee on ee.eeid=a.eeid
+        <where>
+            <include refid="queryAllowContions"></include>
+        </where>
+    </select>
+    <select id="joinallowonline" parameterType="AllowVo" resultType="AllowQo">
+        select a.awid,e.eid,ee.eeimg,e.estate,ee.eename,a.awstate from allow_inf a
+        inner join exam_inf e on e.eid=a.eid
+        inner join examinee_inf ee on ee.eeid=a.eeid
+        <where>
+            <include refid="queryAllowContions"></include>
+        </where>
+    </select>
+    <sql id="queryAllowContions">
+        <if test="awstate!=null">
+            and  a.awstate=#{awstate}
+        </if>
+        <if test="awstate==null">
+            and  a.awstate not in(6)
+        </if>
+        <if test="ename!=null">
+            and e.ename like  concat('%', #{ename},'%')
+        </if>
+        <if test="eid!=null">
+            and a.eid=#{eid}
+        </if>
+        <if test="eename!=null">
+            and ee.eename like  concat('%', #{eename},'%')
+
+        </if>
+
+    </sql>
+    <update id="alterAllow">
+        update  allow_inf set awstate=#{awstate},awmtime=#{awmtime}
+            where awid=#{awid}
+    </update>
+</mapper>

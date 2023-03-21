@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.czw.exammanger.mapper.AdminMapper">
+    <insert id="addadmin" parameterType="AdminInf" useGeneratedKeys="true" keyProperty="aid">
+        insert into admin_inf (aacc,apwd,rid,astate) values
+        (
+            #{aacc},#{apwd},#{rid},#{astate}
+        )
+    </insert>
+
+         <select id="check" parameterType="AdminInf" resultType="AdminInf">
+             select  * from  admin_inf where aacc=#{aacc} and apwd=#{apwd}
+         </select>
+         <update id="alter" parameterType="AdminInf" >
+             update admin_inf
+             <set>
+             <include refid="upAdminContions"></include>
+             </set>
+              where aid=#{aid}
+         </update>
+        <select id="allAdmin"  resultType="AdminInf">
+            select  * from admin_inf where rid not in (1,2,3)
+        </select>
+    <select id="allexaminer"  resultType="AdminInf">
+        select  * from admin_inf where rid = 2
+    </select>
+        <delete id="delAdmin">
+            delete  from admin_inf where aid=#{aid}
+        </delete>
+    <sql id="upAdminContions">
+        <if test="aacc!=null">
+            aacc=#{aacc},
+        </if>
+        <if test="apwd!=null">
+             apwd=#{apwd},
+        </if>
+        <if test="rid!=null">
+            rid=#{rid},
+        </if>
+        <if test="astate!=null">
+            astate=#{astate},
+        </if>
+        <if test="amtime!=null">
+            amtime=#{amtime},
+        </if>
+    </sql>
+</mapper>

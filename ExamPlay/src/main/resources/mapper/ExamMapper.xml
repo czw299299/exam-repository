@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.czw.examplay.mapper.ExamMapper">
+          <select id="selectexams"  parameterType="ExamVo" resultType="ExamInf">
+              SELECT * FROM exam_inf WHERE eid NOT in
+              (select e.eid from allow_inf a
+              INNER JOIN examinee_inf ee on ee.eeid=a.eeid
+              INNER JOIN exam_inf e on e.eid=a.eid
+              where ee.eeid=#{eeid})
+              <include refid="queryexamContions"></include>
+          </select>
+          <select id="selectexamsed"  parameterType="ExamVo" resultType="ExamQo">
+              select e.*,a.* from allow_inf a
+              INNER JOIN examinee_inf ee on ee.eeid=a.eeid
+              INNER JOIN exam_inf e on e.eid=a.eid
+              where ee.eeid=#{eeid}  <include refid="queryexamContions2"></include>
+              and estate in (1,2,3) and a.awstate not in(5,6)
+          </select>
+    <sql id="queryexamContions">
+         <if test="sid!=null">
+             and sid=#{sid}
+         </if>
+        <if test="aid!=null">
+            and aid=#{aid}
+        </if>
+        <if test="estate!=null">
+            and estate=#{estate}
+        </if>
+        <if test="estime!=null">
+            and estime &gt;= #{estime}
+        </if>
+        <if test="estime==null">
+            and estime &gt;= now()
+        </if>
+
+    </sql>
+    <sql id="queryexamContions2">
+        <if test="sid!=null">
+            and sid=#{sid}
+        </if>
+    </sql>
+    <select id="selecteid" parameterType="ExamVo" resultType="ExamQo">
+        select * from exam_inf where eid=#{eid}
+    </select>
+</mapper>
